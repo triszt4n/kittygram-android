@@ -1,24 +1,24 @@
 package hu.triszt4n.kittygram.data.util
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Types
+import hu.triszt4n.kittygram.util.MoshiInstance
 import java.lang.reflect.Type
 
 object Converter {
-    private val gson: Gson = Gson()
-    private val itemType: Type = object : TypeToken<List<String>>() {}.type
-
-    @TypeConverter
-    fun stringToStringList(value: String?): List<String> {
-        return if (value == null)
-            listOf()
-        else
-            gson.fromJson(value, itemType)
+    private val jsonAdapter: JsonAdapter<List<String>> by lazy {
+        val stringListType: Type = Types.newParameterizedType(List::class.java, String::class.java)
+        MoshiInstance.moshi.adapter(stringListType)
     }
 
     @TypeConverter
-    fun stringListToString(list: List<String>): String {
-        return gson.toJson(list)
+    fun stringToTags(value: String): List<String> {
+        return jsonAdapter.fromJson(value).orEmpty()
+    }
+
+    @TypeConverter
+    fun tagsToString(list: List<String>): String {
+        return jsonAdapter.toJson(list)
     }
 }
