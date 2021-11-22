@@ -12,10 +12,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import hu.triszt4n.kittygram.databinding.ActivityMainBinding
-import hu.triszt4n.kittygram.model.Kitty
+import hu.triszt4n.kittygram.api.model.KittyJson
 import hu.triszt4n.kittygram.repository.KittyRepository
 
 class MainActivity : AppCompatActivity() {
@@ -57,10 +56,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.getKitty()
         viewModel.myResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                val kitty: Kitty? = response.body()
-                Log.d("Kitty", kitty?.id.toString())
-                Log.d("Kitty", kitty?.tags.toString())
-                binding.appBarMain.toolbar.title = kitty?.id.toString()
+                val kittyJson: KittyJson? = response.body()
+                Log.d("Kitty DEBUG", kittyJson?.id.toString())
+                Log.d("Kitty DEBUG", kittyJson?.tags.toString())
+                Log.d("Kitty DEBUG", kittyJson?.createdAt.toString())
+                binding.appBarMain.toolbar.title = kittyJson?.id.toString()
             }
             else {
                 Log.e("Kitty error", response.errorBody().toString())

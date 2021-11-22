@@ -1,4 +1,4 @@
-package hu.triszt4n.kittygram.data
+package hu.triszt4n.kittygram.data.util
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

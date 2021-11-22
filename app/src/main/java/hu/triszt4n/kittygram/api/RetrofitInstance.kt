@@ -29,7 +29,7 @@ object RetrofitInstance {
             .build()
     }
 
-    val api by lazy {
+    val api: KittyApi by lazy {
         retrofit.create(KittyApi::class.java)
     }
 
