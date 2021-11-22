@@ -9,8 +9,8 @@ class CollectionRepository(
     private val collectionDao: CollectionDao,
     private val kittyDao: KittyDao)
 {
-    suspend fun addCollection(collectionWithKitties: CollectionWithKitties) {
-        collectionDao.insert(collectionWithKitties.collection)
+    suspend fun addCollection(collection: Collection) {
+        collectionDao.insert(collection)
     }
 
     suspend fun updateCollection(collectionWithKitties: CollectionWithKitties) {

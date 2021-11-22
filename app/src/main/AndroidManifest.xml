@@ -12,8 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kittygram">
         <activity
+            android:name=".ui.CollectionsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
             android:name=".ui.WebKittiesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

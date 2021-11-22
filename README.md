@@ -1,6 +1,8 @@
 # KittyGram
 
 Simple application using 
+- Kotlin 1.5.31
+  - It's important, that if the project does not build, it may be that your Kotlin version is over 1.5.31. Moshi codegen does not support Kotlin over 1.5.31 as for now.
 - Architecture Components 
 - Retrofit 2.9.0
 - Moshi 1.12.0

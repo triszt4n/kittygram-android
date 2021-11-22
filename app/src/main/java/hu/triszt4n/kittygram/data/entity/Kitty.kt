@@ -19,14 +19,6 @@ data class Kitty(
     val url: String,
 
     var rating: Int? = null,
+    var name: String = webId,
     var insertedAt: Date = Date(),
-) {
-    constructor(json: WebKitty, collectionId: Long, rating: Int? = null): this(
-        webId = json.id,
-        tags = json.tags,
-        url = json.url,
-
-        rating = rating,
-        collectionId = collectionId
-    )
-}
+)

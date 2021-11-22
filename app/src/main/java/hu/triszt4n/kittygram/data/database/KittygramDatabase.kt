@@ -10,19 +10,19 @@ import hu.triszt4n.kittygram.data.entity.Collection
 import hu.triszt4n.kittygram.data.entity.Kitty
 
 @Database(entities = [Kitty::class, Collection::class], version = 1, exportSchema = false)
-abstract class KittyDatabase : RoomDatabase() {
+abstract class KittygramDatabase : RoomDatabase() {
 
     abstract fun kittyDao(): KittyDao
     abstract fun collectionDao(): CollectionDao
 
     companion object {
         @Volatile
-        private var INSTANCE: KittyDatabase? = null
+        private var INSTANCE: KittygramDatabase? = null
 
-        fun getDatabase(context: Context): KittyDatabase = INSTANCE ?: synchronized(this) {
+        fun getDatabase(context: Context): KittygramDatabase = INSTANCE ?: synchronized(this) {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
-                KittyDatabase::class.java,
+                KittygramDatabase::class.java,
                 "kitty_database"
             ).build()
             INSTANCE = instance

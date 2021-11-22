@@ -15,9 +15,9 @@ interface KittyApi {
 
     @GET("api/cats")
     suspend fun getAllKitties(
-        @Query("tag") tag: String? = null,
-        @Query("skip") skip: Int? = null,
-        @Query("limit") limit: Int? = null
+        @Query("tags") tag: String = "",
+        @Query("skip") skip: Int = 0,
+        @Query("limit") limit: Int = 1000
     ): Response<List<WebKitty>>
 
     @GET("api/tags")

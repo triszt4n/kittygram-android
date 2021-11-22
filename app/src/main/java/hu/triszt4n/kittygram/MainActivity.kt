@@ -3,6 +3,10 @@ package hu.triszt4n.kittygram
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import hu.triszt4n.kittygram.databinding.ActivityMainBinding
+import android.content.Intent
+import hu.triszt4n.kittygram.ui.CollectionsActivity
+import hu.triszt4n.kittygram.ui.WebKittiesActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,5 +17,15 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.kittiesCard.setOnClickListener {
+            val intent = Intent(this, WebKittiesActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.collectionsCard.setOnClickListener {
+            val intent = Intent(this, CollectionsActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
