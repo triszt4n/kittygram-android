@@ -1,5 +1,6 @@
 package hu.triszt4n.kittygram.data.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
@@ -10,11 +11,19 @@ import java.util.*
 @Entity(tableName = "kitty")
 @TypeConverters(Converter::class)
 data class Kitty(
-    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null,
+
+    @ColumnInfo(name = "web_id")
     var webId: String,
+
+    @ColumnInfo(name = "created_at")
     var createdAt: Date,
+
     var tags: List<String> = listOf(),
+
     var url: String,
+
     var rating: Int? = null
 ) {
     constructor(json: KittyJson): this(

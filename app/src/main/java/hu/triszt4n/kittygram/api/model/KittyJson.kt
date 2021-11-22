@@ -9,5 +9,5 @@ data class KittyJson(
     val id: String,
     val tags: List<String>,
     @Json(name = "created_at") val createdAt: Date,
-    val url: String
+    val url: String = "cat/$id"
 )
