@@ -1,41 +1,32 @@
 package hu.triszt4n.kittygram.data.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import hu.triszt4n.kittygram.data.util.Converter
-import hu.triszt4n.kittygram.api.model.KittyJson
+import hu.triszt4n.kittygram.api.model.WebKitty
 import java.util.*
 
-@Entity(tableName = "kitty")
+@Entity(tableName = "kitty", indices = [Index(value = ["webId"], unique = true)])
 @TypeConverters(Converter::class)
 data class Kitty(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = null,
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    val collectionId: Long,
 
-    @ColumnInfo(name = "web_id")
-    var webId: String,
+    val webId: String,
+    val tags: List<String> = listOf(),
+    val url: String,
 
-    @ColumnInfo(name = "created_at")
-    var createdAt: Date,
-
-    var tags: List<String> = listOf(),
-
-    var url: String,
-
-    var rating: Int? = null
+    var rating: Int? = null,
+    var insertedAt: Date = Date(),
 ) {
-    constructor(json: KittyJson): this(
+    constructor(json: WebKitty, rating: Int, collectionId: Long): this(
         webId = json.id,
-        createdAt = json.createdAt,
         tags = json.tags,
-        url = json.url
-    )
+        url = json.url,
 
-    constructor(json: KittyJson, rating: Int): this(
-        json = json
-    ) {
-        this.rating = rating
-    }
+        rating = rating,
+        collectionId = collectionId
+    )
 }

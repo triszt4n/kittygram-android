@@ -14,8 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import hu.triszt4n.kittygram.databinding.ActivityMainBinding
-import hu.triszt4n.kittygram.api.model.KittyJson
-import hu.triszt4n.kittygram.repository.KittyRepository
+import hu.triszt4n.kittygram.api.model.WebKitty
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,18 +48,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
-        val repository = KittyRepository()
-        val viewModelFactory = MainViewModelFactory(repository)
+        val viewModelFactory = MainViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.getKitty()
         viewModel.myResponse.observe(this, { response ->
             if (response.isSuccessful) {
-                val kittyJson: KittyJson? = response.body()
-                Log.d("Kitty DEBUG", kittyJson?.id.toString())
-                Log.d("Kitty DEBUG", kittyJson?.tags.toString())
-                Log.d("Kitty DEBUG", kittyJson?.createdAt.toString())
-                binding.appBarMain.toolbar.title = kittyJson?.id.toString()
+                val webKitty: WebKitty? = response.body()
+                Log.d("Kitty DEBUG", webKitty?.id.toString())
+                Log.d("Kitty DEBUG", webKitty?.tags.toString())
+                Log.d("Kitty DEBUG", webKitty?.createdAt.toString())
+                binding.appBarMain.toolbar.title = webKitty?.id.toString()
             }
             else {
                 Log.e("Kitty error", response.errorBody().toString())

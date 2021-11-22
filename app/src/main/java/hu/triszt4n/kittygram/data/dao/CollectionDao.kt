@@ -9,14 +9,9 @@ interface CollectionDao {
     @Query("SELECT * FROM collection")
     suspend fun getAll(): List<Collection>
 
-    @Query("SELECT * FROM collection")
-    suspend fun getAllWithKitties(collection: Collection): List<CollectionWithKitties>
-
+    @Transaction
     @Query("SELECT * FROM collection WHERE id = :id")
-    suspend fun getById(id: Long): List<Collection>
-
-    @Query("SELECT * FROM collection WHERE id = :id")
-    suspend fun getWithKittiesById(id: Long): List<CollectionWithKitties>
+    suspend fun getById(id: Long): CollectionWithKitties
 
     @Insert
     fun insert(collection: Collection)

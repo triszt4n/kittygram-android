@@ -5,6 +5,7 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
 import hu.triszt4n.kittygram.util.MoshiInstance
 import java.lang.reflect.Type
+import java.util.*
 
 object Converter {
     private val jsonAdapter: JsonAdapter<List<String>> by lazy {
@@ -13,12 +14,14 @@ object Converter {
     }
 
     @TypeConverter
-    fun stringToTags(value: String): List<String> {
-        return jsonAdapter.fromJson(value).orEmpty()
-    }
+    fun fromString(value: String): List<String> = jsonAdapter.fromJson(value).orEmpty()
 
     @TypeConverter
-    fun tagsToString(list: List<String>): String {
-        return jsonAdapter.toJson(list)
-    }
+    fun tagsToString(list: List<String>): String = jsonAdapter.toJson(list)
+
+    @TypeConverter
+    fun fromTimestamp(value: Long): Date = Date(value)
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date): Long = date.time
 }
