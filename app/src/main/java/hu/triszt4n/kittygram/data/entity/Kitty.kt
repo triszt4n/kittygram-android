@@ -21,7 +21,7 @@ data class Kitty(
     var rating: Int? = null,
     var insertedAt: Date = Date(),
 ) {
-    constructor(json: WebKitty, rating: Int, collectionId: Long): this(
+    constructor(json: WebKitty, collectionId: Long, rating: Int? = null): this(
         webId = json.id,
         tags = json.tags,
         url = json.url,

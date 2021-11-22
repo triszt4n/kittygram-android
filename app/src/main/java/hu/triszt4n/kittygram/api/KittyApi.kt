@@ -4,6 +4,7 @@ import hu.triszt4n.kittygram.api.model.WebKitty
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface KittyApi {
     @GET("cat/{id}?json=true")
@@ -12,11 +13,11 @@ interface KittyApi {
     @GET("cat?json=true")
     suspend fun getRandomKitty(): Response<WebKitty>
 
-    @GET("api/cats?tags={tag}&skip={skip}&limit={limit}")
+    @GET("api/cats")
     suspend fun getAllKitties(
-        @Path("tag") tag: String = "",
-        @Path("skip") skip: Int = 0,
-        @Path("limit") limit: Int? = null
+        @Query("tag") tag: String? = null,
+        @Query("skip") skip: Int? = null,
+        @Query("limit") limit: Int? = null
     ): Response<List<WebKitty>>
 
     @GET("api/tags")

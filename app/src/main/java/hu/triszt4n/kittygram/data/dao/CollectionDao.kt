@@ -7,18 +7,18 @@ import hu.triszt4n.kittygram.data.entity.Collection
 @Dao
 interface CollectionDao {
     @Query("SELECT * FROM collection")
-    suspend fun getAll(): List<Collection>
+    suspend fun getAll(): List<CollectionWithKitties>
 
     @Transaction
     @Query("SELECT * FROM collection WHERE id = :id")
     suspend fun getById(id: Long): CollectionWithKitties
 
     @Insert
-    fun insert(collection: Collection)
+    suspend fun insert(collection: Collection)
 
     @Update
-    fun update(collection: Collection)
+    suspend fun update(collection: Collection)
 
     @Delete
-    fun delete(collection: Collection)
+    suspend fun delete(collection: Collection)
 }

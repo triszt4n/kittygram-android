@@ -16,7 +16,7 @@ the options the user can choose to see the possible tags.
 
 The user can browse the cats, and can choose cats from this page with the save button on the fragment
 to save to a collection, which opens up the Kitty saver fragment. Once a cat is chosen for saving into
-collection, if the Kitty is already in the Collection, it will be overwritten.
+collection, if the Kitty is already in the Collection, a SnackBar with the information comes up.
 If not, a Kitty entity will be created for it and will be persistently saved (but the picture is still 
 retrieved from the API by Glide). On a simple click on the picture, the cat viewer fragment comes up.
 
