@@ -10,8 +10,14 @@ interface KittyApi {
     suspend fun getKitty(@Path("id") id: String): Response<KittyJson>
 
     @GET("cat?json=true")
-    suspend fun getRandomKitty(): KittyJson
+    suspend fun getRandomKitty(): Response<KittyJson>
+
+    @GET("api/cats?skip={skip}&limit={limit}")
+    suspend fun getAllKitties(
+        @Path("skip") skip: Int = 0,
+        @Path("limit") limit: Int
+    ): Response<List<KittyJson>>
 
     @GET("api/cats?tags={tag}")
-    suspend fun getAllWithTag(@Path("tag") tag: String): List<KittyJson>
+    suspend fun getAllKittiesWithTag(@Path("tag") tag: String): Response<List<KittyJson>>
 }
