@@ -1,6 +1,7 @@
 package hu.triszt4n.kittygram
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -11,12 +12,18 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import hu.triszt4n.kittygram.databinding.ActivityMainBinding
+import hu.triszt4n.kittygram.model.Kitty
+import hu.triszt4n.kittygram.repository.KittyRepository
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +49,24 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        val repository = KittyRepository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.getKitty()
+        viewModel.myResponse.observe(this, { response ->
+            if (response.isSuccessful) {
+                val kitty: Kitty? = response.body()
+                Log.d("Kitty", kitty?.id.toString())
+                Log.d("Kitty", kitty?.tags.toString())
+                binding.appBarMain.toolbar.title = kitty?.id.toString()
+            }
+            else {
+                Log.e("Kitty error", response.errorBody().toString())
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
