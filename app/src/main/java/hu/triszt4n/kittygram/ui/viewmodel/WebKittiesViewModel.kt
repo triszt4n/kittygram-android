@@ -21,9 +21,9 @@ class WebKittiesViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     val kittiesLiveData: MutableLiveData<Response<List<WebKitty>>> = MutableLiveData()
-    fun getAllKitties(tag: String? = null) {
+    fun getAllKitties(tag: String? = null, page: Int) {
         viewModelScope.launch {
-            kittiesLiveData.value = repository.getAllWebKitties(tag)
+            kittiesLiveData.value = repository.getAllWebKitties(tag, page)
         }
     }
 

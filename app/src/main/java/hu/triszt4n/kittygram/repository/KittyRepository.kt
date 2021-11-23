@@ -9,8 +9,15 @@ import retrofit2.Response
 class KittyRepository(
     private val kittyDao: KittyDao)
 {
-    suspend fun getAllWebKitties(tag: String?): Response<List<WebKitty>> {
-        return RetrofitInstance.api.getAllKitties(tag.orEmpty())
+    companion object {
+        const val PAGING_LIMIT = 10
+    }
+
+    suspend fun getAllWebKitties(tag: String?, page: Int = 1): Response<List<WebKitty>> {
+        return RetrofitInstance.api.getAllKitties(
+                tag = tag.orEmpty(),
+                limit = page * PAGING_LIMIT
+        )
     }
 
     suspend fun addKitty(kitty: Kitty): Boolean {

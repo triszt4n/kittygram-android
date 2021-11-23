@@ -8,42 +8,37 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hu.triszt4n.kittygram.databinding.ActivityCollectionKittiesBinding
 import hu.triszt4n.kittygram.databinding.ActivityWebKittiesBinding
+import hu.triszt4n.kittygram.ui.adapter.CollectionKittyListAdapter
 import hu.triszt4n.kittygram.ui.adapter.WebKittyListAdapter
 import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
 import hu.triszt4n.kittygram.ui.viewmodel.WebKittiesViewModel
 
-class WebKittiesActivity : AppCompatActivity() {
+class CollectionKittiesActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityWebKittiesBinding
+    private lateinit var binding: ActivityCollectionKittiesBinding
     private lateinit var viewModel: WebKittiesViewModel
 
     private var page: Int = 1
 
-    private val adapter: WebKittyListAdapter by lazy {
-        WebKittyListAdapter(binding)
+    private val adapter: CollectionKittyListAdapter by lazy {
+        CollectionKittyListAdapter(binding)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityWebKittiesBinding.inflate(layoutInflater)
+        binding = ActivityCollectionKittiesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        // setSupportActionBar(binding.toolbar)
 
         initRecyclerView()
         observeLiveData()
 
-        binding.nestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (!v.canScrollVertically(1)) {
-                ++page
-                viewModel.getAllKitties(page = page)
-            }
-        }
-
-        binding.fab.setOnClickListener {
-            binding.nestedScrollView.fullScroll(View.FOCUS_UP)
-        }
+        // binding.fab.setOnClickListener {
+            // binding.nestedScrollView.fullScroll(View.FOCUS_UP)
+        // }
     }
 
     private fun initRecyclerView() {

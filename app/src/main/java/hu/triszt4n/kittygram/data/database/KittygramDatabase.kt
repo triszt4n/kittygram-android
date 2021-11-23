@@ -9,7 +9,7 @@ import hu.triszt4n.kittygram.data.dao.KittyDao
 import hu.triszt4n.kittygram.data.entity.Collection
 import hu.triszt4n.kittygram.data.entity.Kitty
 
-@Database(entities = [Kitty::class, Collection::class], version = 1, exportSchema = false)
+@Database(entities = [Kitty::class, Collection::class], version = 2, exportSchema = false)
 abstract class KittygramDatabase : RoomDatabase() {
 
     abstract fun kittyDao(): KittyDao
