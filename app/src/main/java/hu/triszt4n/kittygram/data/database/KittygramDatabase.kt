@@ -23,8 +23,9 @@ abstract class KittygramDatabase : RoomDatabase() {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
                 KittygramDatabase::class.java,
-                "kitty_database"
-            ).build()
+                "kitty_database")
+                .fallbackToDestructiveMigration()
+                .build()
             INSTANCE = instance
             return instance
         }

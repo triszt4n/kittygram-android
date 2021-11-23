@@ -10,6 +10,7 @@ class KittygramViewModelFactory(private val application: Application): ViewModel
         return when(modelClass) {
             CollectionsViewModel::class.java -> CollectionsViewModel(application) as T
             WebKittiesViewModel::class.java -> WebKittiesViewModel(application) as T
+            CollectionKittiesViewModel::class.java -> CollectionKittiesViewModel(application) as T
             else -> throw IllegalArgumentException("No ViewModel found with this modelClass")
         }
     }

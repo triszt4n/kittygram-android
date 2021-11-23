@@ -31,4 +31,8 @@ class CollectionRepository(
     suspend fun getCollectionWithKitties(collection: Collection): CollectionWithKitties {
         return collectionDao.getById(collection.id)
     }
+
+    suspend fun getCollectionWithKitties(collectionId: Long): CollectionWithKitties {
+        return collectionDao.getById(collectionId)
+    }
 }

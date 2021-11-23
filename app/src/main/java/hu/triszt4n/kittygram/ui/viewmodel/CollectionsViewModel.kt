@@ -26,11 +26,20 @@ class CollectionsViewModel(application: Application): AndroidViewModel(applicati
         }
     }
 
-    var showAddError: Boolean = false
+    var errorMessage: String? = null
     fun addCollection(name: String) {
+        if (name.length < 4) {
+            errorMessage = "Name too short (>3)"
+            return
+        }
+        else {
+            errorMessage = null
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val collection = Collection(name = name)
             repository.addCollection(collection)
+            collectionsRes.postValue(repository.getAllCollections())
         }
     }
 }

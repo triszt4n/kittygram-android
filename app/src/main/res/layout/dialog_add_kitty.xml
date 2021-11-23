@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/panel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Add a name to your kitten" />
+
+    <EditText
+        android:id="@+id/kitty_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name your kitty"
+        android:imeOptions="actionNext"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Rate the cuteness of the kitty" />
+
+    <RatingBar
+        android:id="@+id/kitty_rating"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Choose a collection to attach kitty to" />
+
+    <Spinner
+        android:id="@+id/collections_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:spinnerMode="dialog" />
+</LinearLayout>
