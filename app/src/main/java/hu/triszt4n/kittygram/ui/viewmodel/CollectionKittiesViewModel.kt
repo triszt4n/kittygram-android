@@ -33,15 +33,32 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
         }
     }
 
-    fun deleteKitty(kitty: Kitty) {
-        viewModelScope.launch(Dispatchers.IO) {
-            kittyRepository.deleteKitty(kitty)
+    fun deleteCollection() {
+        viewModelScope.launch {
+            collectionRes.value?.let { collectionRepository.deleteCollection(it) }
         }
     }
 
+    fun deleteKitty(kitty: Kitty) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kittyRepository.deleteKitty(kitty)
+            getCollection()
+        }
+    }
+
+    var errorMessage: String? = null
     fun updateKitty(kitty: Kitty) {
+        if (kitty.name.length < 4) {
+            errorMessage = "Name too short (under 4 characters)"
+            return
+        }
+        else {
+            errorMessage = null
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             kittyRepository.updateKitty(kitty)
+            getCollection()
         }
     }
 }

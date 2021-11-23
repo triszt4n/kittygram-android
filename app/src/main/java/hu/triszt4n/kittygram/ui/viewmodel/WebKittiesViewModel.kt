@@ -45,6 +45,14 @@ class WebKittiesViewModel(application: Application): AndroidViewModel(applicatio
         rating: Int,
         name: String
     ) {
+        if (name.length < 4) {
+            errorMessage = "Name too short (under 4 characters)"
+            return
+        }
+        else {
+            errorMessage = null
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val kitty = Kitty(
                     webId = webKitty.id,

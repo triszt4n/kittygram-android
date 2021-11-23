@@ -36,9 +36,12 @@ class CollectionsActivity :
 
         binding = ActivityCollectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         initRecyclerView()
         observeLiveData()
+
+        binding.toolbar.title = "Your collections"
 
         binding.fab.setOnClickListener {
             CreateCollectionDialog(this)
@@ -70,8 +73,14 @@ class CollectionsActivity :
     }
 
     override fun onOpenCollection(collection: CollectionWithKitties) {
-        val intent = Intent(this, CollectionKittiesActivity::class.java)
-        intent.putExtra("collectionId", collection.collection.id)
+        val intent = Intent(this, CollectionKittiesActivity::class.java).apply {
+            putExtra("collectionId", collection.collection.id)
+        }
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllCollections()
     }
 }

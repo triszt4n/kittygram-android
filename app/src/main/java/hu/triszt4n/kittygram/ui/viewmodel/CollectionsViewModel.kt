@@ -29,7 +29,7 @@ class CollectionsViewModel(application: Application): AndroidViewModel(applicati
     var errorMessage: String? = null
     fun addCollection(name: String) {
         if (name.length < 4) {
-            errorMessage = "Name too short (>3)"
+            errorMessage = "Name too short (under 4 characters)"
             return
         }
         else {

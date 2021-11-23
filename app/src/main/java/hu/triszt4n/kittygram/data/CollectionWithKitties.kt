@@ -11,5 +11,5 @@ data class CollectionWithKitties(
          parentColumn = "id",
          entityColumn = "collectionId"
     )
-    val kitties: List<Kitty>
+    var kitties: List<Kitty>
 )

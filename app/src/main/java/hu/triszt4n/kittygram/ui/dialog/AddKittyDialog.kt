@@ -62,7 +62,7 @@ class AddKittyDialog(
                 listener.onSaveKitty(
                     kitty,
                     binding.kittyName.text.toString(),
-                    binding.kittyRating.numStars,
+                    binding.kittyRating.rating.toInt(),
                     collections.get(binding.collectionsSpinner.selectedItemPosition)
                 )
             }
