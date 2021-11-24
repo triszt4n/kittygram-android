@@ -10,7 +10,6 @@ import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
 import hu.triszt4n.kittygram.databinding.ListRowCollectionBinding
 
 class CollectionListAdapter(
-        private val binding: ActivityCollectionsBinding,
         private val listener: CollectionOpenListener
 ) : RecyclerView.Adapter<CollectionListAdapter.CollectionViewHolder>()
 {

@@ -41,15 +41,16 @@ class WebKittiesActivity :
         initRecyclerView()
         observeLiveData()
 
-        binding.nestedScrollView.setOnScrollChangeListener { v, _, _, _, _ ->
+        binding.recyclerView.setOnScrollChangeListener { v, _, _, _, _ ->
             if (!v.canScrollVertically(1)) {
+                binding.progressBar.visibility = View.VISIBLE
                 ++page
-                viewModel.getAllKitties(page = page)
+                viewModel.addAllKitties(page = page)
             }
         }
 
         binding.fab.setOnClickListener {
-            binding.nestedScrollView.fullScroll(View.FOCUS_UP)
+            binding.recyclerView.smoothScrollToPosition(0)
         }
     }
 
@@ -61,28 +62,26 @@ class WebKittiesActivity :
     private fun observeLiveData() {
         val viewModelFactory = KittygramViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(WebKittiesViewModel::class.java)
-        viewModel.getAllKitties(page = page)
+        binding.progressBar.visibility = View.VISIBLE
+        viewModel.initFirstPageKitties()
         viewModel.getAllCollections()
-        viewModel.kittiesLiveData.observe(this, { response ->
-            if (response.isSuccessful) {
-                response.body()?.let { adapter.loadItems(it) }
+        viewModel.addedKittiesLiveData.observe(this, { list ->
+            binding.progressBar.visibility = View.GONE
+            if (viewModel.errorMessage != null) {
+                Snackbar.make(
+                    binding.root,
+                    viewModel.errorMessage!!,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
             else {
-                Snackbar.make(
-                        binding.root,
-                        response.errorBody().toString(),
-                        Snackbar.LENGTH_LONG
-                ).show()
+                Log.d("KITTIES LOADED IN", "size: ${list?.size}: $list")
+                adapter.addItems(list)
             }
         })
         viewModel.collectionsLiveData.observe(this, { list ->
             collections = list
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // menuInflater.inflate(R.menu.main, menu)
-        return true
     }
 
     override fun onItemSaved(item: WebKitty) {

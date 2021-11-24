@@ -13,10 +13,11 @@ class KittyRepository(
         const val PAGING_LIMIT = 10
     }
 
-    suspend fun getAllWebKitties(tag: String?, page: Int = 1): Response<List<WebKitty>> {
+    suspend fun getPaginatedWebKitties(tag: String?, page: Int = 0): Response<MutableList<WebKitty>> {
         return RetrofitInstance.api.getAllKitties(
                 tag = tag.orEmpty(),
-                limit = page * PAGING_LIMIT
+                limit = PAGING_LIMIT,
+                skip = (page - 1) * PAGING_LIMIT
         )
     }
 

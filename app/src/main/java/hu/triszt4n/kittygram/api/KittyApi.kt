@@ -18,7 +18,7 @@ interface KittyApi {
         @Query("tags") tag: String = "",
         @Query("skip") skip: Int = 0,
         @Query("limit") limit: Int = 1000
-    ): Response<List<WebKitty>>
+    ): Response<MutableList<WebKitty>>
 
     @GET("api/tags")
     suspend fun getPossibleTags(): Response<List<String>>

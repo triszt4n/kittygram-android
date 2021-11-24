@@ -12,7 +12,6 @@ import hu.triszt4n.kittygram.repository.CollectionRepository
 import hu.triszt4n.kittygram.repository.KittyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class WebKittiesViewModel(application: Application): AndroidViewModel(application) {
     private val kittyRepository: KittyRepository
@@ -24,15 +23,43 @@ class WebKittiesViewModel(application: Application): AndroidViewModel(applicatio
         collectionRepository = CollectionRepository(collectionDao, kittyDao)
     }
 
-    val kittiesLiveData: MutableLiveData<Response<List<WebKitty>>> = MutableLiveData()
-    fun getAllKitties(tag: String? = null, page: Int) {
+    val addedKittiesLiveData: MutableLiveData<MutableList<WebKitty>> = MutableLiveData()
+
+    fun clearAddedKitties() {
         viewModelScope.launch {
-            kittiesLiveData.value = kittyRepository.getAllWebKitties(tag, page)
+            addedKittiesLiveData.value?.clear()
+        }
+    }
+
+    fun initFirstPageKitties(tag: String? = null) {
+        viewModelScope.launch {
+            errorMessage = null
+            val response = kittyRepository.getPaginatedWebKitties(tag, 1)
+            if (response.isSuccessful) {
+                addedKittiesLiveData.value = response.body()!!
+            }
+            else {
+                errorMessage = response.errorBody().toString()
+            }
+        }
+    }
+
+    fun addAllKitties(tag: String? = null, page: Int) {
+        viewModelScope.launch {
+            errorMessage = null
+            val response = kittyRepository.getPaginatedWebKitties(tag, page)
+            if (response.isSuccessful) {
+                addedKittiesLiveData.value = response.body()!!
+            }
+            else {
+                errorMessage = response.errorBody().toString()
+            }
         }
     }
 
     val collectionsLiveData: MutableLiveData<List<CollectionWithKitties>> = MutableLiveData()
     fun getAllCollections() {
+        errorMessage = null
         viewModelScope.launch {
             collectionsLiveData.value = collectionRepository.getAllCollections()
         }
@@ -45,12 +72,10 @@ class WebKittiesViewModel(application: Application): AndroidViewModel(applicatio
         rating: Int,
         name: String
     ) {
+        errorMessage = null
         if (name.length < 4) {
             errorMessage = "Name too short (under 4 characters)"
             return
-        }
-        else {
-            errorMessage = null
         }
 
         viewModelScope.launch(Dispatchers.IO) {

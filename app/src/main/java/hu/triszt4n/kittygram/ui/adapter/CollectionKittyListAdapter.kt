@@ -2,6 +2,7 @@ package hu.triszt4n.kittygram.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,18 +29,17 @@ class CollectionKittyListAdapter(
     }
 
     private var items = emptyList<Kitty>()
-    private var stfalconImageViewer: StfalconImageViewer.Builder<Kitty>? = null
-
-    fun loadItems(kitties: List<Kitty>) {
-        items = kitties
-
-        stfalconImageViewer = StfalconImageViewer.Builder(binding.root.context, items) { view, image ->
+    private val stfalconImageViewerBuilder by lazy {
+        StfalconImageViewer.Builder(binding.root.context, items) { view, image ->
             Glide
                 .with(binding.root.context)
                 .load("${Constants.BASE_URL}/${image.url}")
                 .into(view)
         }
+    }
 
+    fun loadItems(kitties: List<Kitty>) {
+        items = kitties
         notifyDataSetChanged()
     }
 
@@ -53,17 +53,17 @@ class CollectionKittyListAdapter(
         Glide.with(binding.root.context)
                 .load("${Constants.BASE_URL}/${kitty.url}")
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.binding.collectionKittyImage)
 
         holder.binding.kittyName.text = kitty.name
         holder.binding.kittyRating.rating = kitty.rating?.toFloat() ?: 0.0f
         holder.binding.kittyTags.text = kitty.tags.toString()
 
-        holder.binding.collectionKittyImage.setOnClickListener {
-            stfalconImageViewer
-                ?.withStartPosition(position)
-                ?.show(true)
+        holder.binding.collectionKittyImage.setOnClickListener { view ->
+            stfalconImageViewerBuilder
+                .withTransitionFrom(view as ImageView?)
+                .withStartPosition(position)
+                .show()
         }
 
         holder.binding.kittyDeleteButton.setOnClickListener {

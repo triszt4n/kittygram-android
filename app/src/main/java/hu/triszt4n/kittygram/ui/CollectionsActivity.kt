@@ -28,7 +28,7 @@ class CollectionsActivity :
     private lateinit var binding: ActivityCollectionsBinding
     private lateinit var viewModel: CollectionsViewModel
     private val adapter: CollectionListAdapter by lazy {
-        CollectionListAdapter(binding, this)
+        CollectionListAdapter(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
