@@ -14,15 +14,15 @@
         <activity
             android:name=".ui.CollectionKittiesActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.Kittygram.NoActionBar" />
         <activity
             android:name=".ui.CollectionsActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.Kittygram.NoActionBar" />
         <activity
             android:name=".ui.WebKittiesActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.Kittygram.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,7 +30,6 @@
             android:theme="@style/Theme.Kittygram.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
