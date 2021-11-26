@@ -1,5 +1,6 @@
 package hu.triszt4n.kittygram.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -147,6 +148,14 @@ class WebKittiesActivity :
         collection: CollectionWithKitties?
     ) {
         viewModel.addKittyToCollection(webKitty, collection, rating, name)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sharedPreferences = getSharedPreferences("kittygram_preferences", Context.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("quittingApplication", true)) {
+            finish()
+        }
     }
 
     override fun onBackPressed() {
