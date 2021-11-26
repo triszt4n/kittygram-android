@@ -55,23 +55,25 @@ class CollectionKittyListAdapter(
                 .centerCrop()
                 .into(holder.binding.collectionKittyImage)
 
-        holder.binding.kittyName.text = kitty.name
-        holder.binding.kittyRating.rating = kitty.rating?.toFloat() ?: 0.0f
-        holder.binding.kittyTags.text = kitty.tags.toString()
+        holder.binding.apply {
+            kittyName.text = kitty.name
+            kittyRating.rating = kitty.rating?.toFloat() ?: 0.0f
+            kittyTags.text = kitty.tags.toString()
 
-        holder.binding.collectionKittyImage.setOnClickListener { view ->
-            stfalconImageViewerBuilder
-                .withTransitionFrom(view as ImageView?)
-                .withStartPosition(position)
-                .show()
-        }
+            collectionKittyImage.setOnClickListener { view ->
+                stfalconImageViewerBuilder
+                    .withTransitionFrom(view as ImageView?)
+                    .withStartPosition(position)
+                    .show()
+            }
 
-        holder.binding.kittyDeleteButton.setOnClickListener {
-            listener.onDeleteClicked(kitty)
-        }
+            kittyDeleteButton.setOnClickListener {
+                listener.onDeleteClicked(kitty)
+            }
 
-        holder.binding.kittyModifyButton.setOnClickListener {
-            listener.onUpdateClicked(kitty)
+            kittyModifyButton.setOnClickListener {
+                listener.onUpdateClicked(kitty)
+            }
         }
     }
 

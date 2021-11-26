@@ -26,4 +26,26 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:padding="4dp"
         tools:listitem="@layout/list_row_collection_kitty" />
+
+    <LinearLayout
+        android:id="@+id/collection_count_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="?attr/actionBarSize">
+        <com.google.android.material.card.MaterialCardView
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:padding="8dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/collection_count"
+                style="?attr/textAppearanceHeadline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                tools:text="32 items" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

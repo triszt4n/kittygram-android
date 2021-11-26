@@ -10,9 +10,8 @@ import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
 import hu.triszt4n.kittygram.databinding.ListRowCollectionBinding
 
 class CollectionListAdapter(
-        private val listener: CollectionOpenListener
-) : RecyclerView.Adapter<CollectionListAdapter.CollectionViewHolder>()
-{
+    private val listener: CollectionOpenListener
+) : RecyclerView.Adapter<CollectionListAdapter.CollectionViewHolder>() {
     private var items = emptyList<CollectionWithKitties>()
 
     interface CollectionOpenListener {
@@ -25,20 +24,26 @@ class CollectionListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CollectionViewHolder(
-            ListRowCollectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ListRowCollectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
         val collectionWithKitties = items[position]
 
-        holder.binding.collectionName.text = collectionWithKitties.collection.name
+        holder.binding.apply {
+            collectionName.text = collectionWithKitties.collection.name
+            collectionCount.text =
+                if (collectionWithKitties.kitties.isEmpty()) "empty"
+                else "${collectionWithKitties.kitties.size} items"
 
-        holder.binding.collectionOpenButton.setOnClickListener {
-            listener.onOpenCollection(collectionWithKitties)
+            collectionOpenButton.setOnClickListener {
+                listener.onOpenCollection(collectionWithKitties)
+            }
         }
     }
 
     override fun getItemCount(): Int = items.size
 
-    inner class CollectionViewHolder(val binding: ListRowCollectionBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class CollectionViewHolder(val binding: ListRowCollectionBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

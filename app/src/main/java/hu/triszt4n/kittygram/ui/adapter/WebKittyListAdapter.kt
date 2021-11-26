@@ -54,10 +54,6 @@ class WebKittyListAdapter(
         ListRowWebKittyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
-    override fun onViewRecycled(holder: WebKittyViewHolder) {
-        super.onViewRecycled(holder)
-    }
-
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WebKittyViewHolder, position: Int) {
         val kitty = items[position]
@@ -67,19 +63,22 @@ class WebKittyListAdapter(
             .centerCrop()
             .into(holder.binding.kittyImage)
 
-        holder.binding.kittyImage.setOnClickListener { view ->
-            stfalconImageViewerBuilder
-                .withStartPosition(position)
-                .withTransitionFrom(view as ImageView?)
-                .show()
-        }
+        holder.binding.apply {
+            kittyImage.setOnClickListener { view ->
+                stfalconImageViewerBuilder
+                    .withStartPosition(position)
+                    .withTransitionFrom(view as ImageView?)
+                    .show()
+            }
 
-        holder.binding.kittyTags.text = kitty.tags.let { if (it.isEmpty()) "" else it.toString() }
-        holder.binding.kittyDate.text =
-            SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(kitty.createdAt)
+            kittySaveButton.setOnClickListener {
+                listener.onItemSaved(kitty)
+            }
 
-        holder.binding.kittySaveButton.setOnClickListener {
-            listener.onItemSaved(kitty)
+            kittyPosition.text = "#${position + 1}"
+            kittyTags.text = kitty.tags.let { if (it.isEmpty()) "" else it.toString() }
+            kittyDate.text =
+                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(kitty.createdAt)
         }
     }
 

@@ -77,9 +77,9 @@ class WebKittiesViewModel(application: Application) : AndroidViewModel(applicati
             )
             val resultKitty: Kitty? = kittyRepository.addKitty(kitty)
             if (resultKitty != null) {
-                addedKitty.value = resultKitty!!
+                addedKitty.postValue(resultKitty!!)
             } else {
-                errorMessage.value = "Kitty already in Collection!"
+                errorMessage.postValue("Kitty already in Collection!")
             }
         }
     }

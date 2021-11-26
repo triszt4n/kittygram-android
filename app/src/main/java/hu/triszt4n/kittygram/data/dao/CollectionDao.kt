@@ -8,14 +8,14 @@ import hu.triszt4n.kittygram.data.entity.Collection
 interface CollectionDao {
     @Transaction
     @Query("SELECT * FROM collection")
-    suspend fun getAll(): List<CollectionWithKitties>
+    suspend fun findAll(): List<CollectionWithKitties>
 
     @Transaction
     @Query("SELECT * FROM collection WHERE id = :id")
-    suspend fun getById(id: Long?): CollectionWithKitties
+    suspend fun findById(id: Long?): CollectionWithKitties?
 
     @Insert
-    suspend fun insert(collection: Collection)
+    suspend fun insert(collection: Collection): Long?
 
     @Update
     suspend fun update(collection: Collection)

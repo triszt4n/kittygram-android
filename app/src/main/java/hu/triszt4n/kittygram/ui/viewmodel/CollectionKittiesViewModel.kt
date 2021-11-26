@@ -28,36 +28,55 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
     var errorMessage: MutableLiveData<String?> = MutableLiveData()
 
     fun getCollection() {
+        errorMessage.value = null
         viewModelScope.launch {
             collectionWithKitties.value = collectionId?.let { collectionRepository.getCollectionWithKitties(it) }
         }
     }
 
+    // Called only by IO coroutines
+    private suspend fun postGetCollection() {
+        collectionWithKitties.postValue(collectionRepository.getCollectionWithKitties(collectionId))
+    }
+
     fun deleteCollection() {
+        errorMessage.value = null
         viewModelScope.launch {
             collectionWithKitties.value?.let { collectionRepository.deleteCollection(it) }
         }
     }
 
     fun deleteKitty(kitty: Kitty) {
+        errorMessage.value = null
         viewModelScope.launch(Dispatchers.IO) {
             kittyRepository.deleteKitty(kitty)
-            getCollection()
+            postGetCollection()
         }
     }
 
     fun updateKitty(kitty: Kitty) {
+        errorMessage.value = null
         if (kitty.name.length < 4) {
             errorMessage.value = "Name too short (under 4 characters)"
             return
         }
-        else {
-            errorMessage.value = null
-        }
 
         viewModelScope.launch(Dispatchers.IO) {
             kittyRepository.updateKitty(kitty)
-            getCollection()
+            postGetCollection()
+        }
+    }
+
+    fun updateCollection(collection: CollectionWithKitties) {
+        errorMessage.value = null
+        if (collection.collection.name.length < 4) {
+            errorMessage.value = "Name too short (under 4 characters)"
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            collectionRepository.updateCollection(collection)
+            postGetCollection()
         }
     }
 }

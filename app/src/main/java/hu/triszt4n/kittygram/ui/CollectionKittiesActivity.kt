@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hu.triszt4n.kittygram.R
+import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.entity.Kitty
 import hu.triszt4n.kittygram.databinding.ActivityCollectionKittiesBinding
 import hu.triszt4n.kittygram.ui.adapter.CollectionKittyListAdapter
+import hu.triszt4n.kittygram.ui.dialog.UpdateCollectionDialog
 import hu.triszt4n.kittygram.ui.dialog.UpdateKittyDialog
 import hu.triszt4n.kittygram.ui.viewmodel.CollectionKittiesViewModel
 import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
@@ -20,6 +23,7 @@ import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
 class CollectionKittiesActivity :
     CollectionKittyListAdapter.CollectionKittyListener,
     UpdateKittyDialog.UpdateKittyListener,
+    UpdateCollectionDialog.UpdateCollectionListener,
     AppCompatActivity() {
 
     private lateinit var binding: ActivityCollectionKittiesBinding
@@ -32,6 +36,8 @@ class CollectionKittiesActivity :
     private val collectionId: Long by lazy {
         intent.extras?.get("collectionId") as Long
     }
+
+    private var collectionWithKitties: CollectionWithKitties? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,16 @@ class CollectionKittiesActivity :
 
         viewModel.collectionWithKitties.observe(this) { collectionWithKitties ->
             binding.toolbar.title = collectionWithKitties.collection.name
+            val count = collectionWithKitties.kitties.size
+            if (count > 0) {
+                binding.collectionCountContainer.visibility = View.VISIBLE
+                binding.collectionCount.text = "$count Kitties"
+            }
+            else {
+                binding.collectionCountContainer.visibility = View.GONE
+            }
+
+            this.collectionWithKitties = collectionWithKitties
             adapter.loadItems(collectionWithKitties.kitties)
         }
 
@@ -74,7 +90,7 @@ class CollectionKittiesActivity :
     // Boilerplate code
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val toolbarMenu: Menu = binding.toolbar.menu
-        menuInflater.inflate(R.menu.menu_toolbar, toolbarMenu)
+        menuInflater.inflate(R.menu.collection_menu_toolbar, toolbarMenu)
         for (i in 0 until toolbarMenu.size()) {
             val menuItem: MenuItem = toolbarMenu.getItem(i)
             menuItem.setOnMenuItemClickListener { item -> onOptionsItemSelected(item) }
@@ -103,6 +119,20 @@ class CollectionKittiesActivity :
                     .show()
                 true
             }
+            R.id.collection_update_button -> {
+                if (collectionWithKitties == null) {
+                    Snackbar
+                        .make(binding.root, "No collection loaded yet!", Snackbar.LENGTH_LONG)
+                        .show()
+                    false
+                }
+                else {
+                    UpdateCollectionDialog(this)
+                        .addCollection(collectionWithKitties!!)
+                        .show(supportFragmentManager, UpdateCollectionDialog.TAG)
+                    true
+                }
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -126,5 +156,9 @@ class CollectionKittiesActivity :
 
     override fun onSaveKitty(kitty: Kitty) {
         viewModel.updateKitty(kitty)
+    }
+
+    override fun onSaveCollection(collection: CollectionWithKitties) {
+        viewModel.updateCollection(collection)
     }
 }

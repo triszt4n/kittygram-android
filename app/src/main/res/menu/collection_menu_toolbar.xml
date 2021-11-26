@@ -4,7 +4,11 @@
     <item
         android:id="@+id/collection_delete_button"
         android:icon="@drawable/ic_baseline_delete_outline_24"
-        android:title="Delete Collection"
-        app:showAsAction="ifRoom">
-    </item>
+        android:title="Remove Collection"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/collection_update_button"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="Modify Name"
+        app:showAsAction="collapseActionView" />
 </menu>
