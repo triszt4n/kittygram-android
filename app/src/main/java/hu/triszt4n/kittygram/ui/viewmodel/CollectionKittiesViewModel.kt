@@ -11,6 +11,7 @@ import hu.triszt4n.kittygram.repository.CollectionRepository
 import hu.triszt4n.kittygram.repository.KittyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CollectionKittiesViewModel(application: Application): AndroidViewModel(application) {
     private val collectionRepository: CollectionRepository
@@ -25,7 +26,7 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
 
     var collectionId: Long? = null
     val collectionWithKitties: MutableLiveData<CollectionWithKitties> = MutableLiveData()
-    var errorMessage: MutableLiveData<String?> = MutableLiveData()
+    val errorMessage: MutableLiveData<String?> = MutableLiveData()
 
     fun getCollection() {
         errorMessage.value = null
@@ -41,7 +42,7 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
 
     fun deleteCollection() {
         errorMessage.value = null
-        viewModelScope.launch {
+        runBlocking {
             collectionWithKitties.value?.let { collectionRepository.deleteCollection(it) }
         }
     }

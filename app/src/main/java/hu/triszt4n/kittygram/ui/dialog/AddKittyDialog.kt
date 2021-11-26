@@ -21,7 +21,7 @@ class AddKittyDialog(
     }
 
     interface AddKittyListener {
-        fun onSaveKitty(webKitty: WebKitty, name: String, rating: Int, collection: CollectionWithKitties)
+        fun onSaveKitty(webKitty: WebKitty, name: String, rating: Int, collection: CollectionWithKitties?)
     }
 
     private lateinit var binding: DialogAddKittyBinding
@@ -63,7 +63,7 @@ class AddKittyDialog(
                     kitty,
                     binding.kittyName.text.toString(),
                     binding.kittyRating.rating.toInt(),
-                    collections.get(binding.collectionsSpinner.selectedItemPosition)
+                    collections[binding.collectionsSpinner.selectedItemPosition]
                 )
             }
             .setNegativeButton("Cancel", null)

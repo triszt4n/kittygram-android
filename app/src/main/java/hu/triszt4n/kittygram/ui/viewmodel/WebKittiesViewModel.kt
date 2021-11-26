@@ -56,13 +56,17 @@ class WebKittiesViewModel(application: Application) : AndroidViewModel(applicati
 
     fun addKittyToCollection(
         webKitty: WebKitty,
-        collectionWithKitties: CollectionWithKitties,
+        collectionWithKitties: CollectionWithKitties?,
         rating: Int,
         name: String
     ) {
         errorMessage.value = null
         if (name.length < 4) {
             errorMessage.value = "Name too short (under 4 characters)"
+            return
+        }
+        if (collectionWithKitties == null) {
+            errorMessage.value = "No collection chosen!"
             return
         }
 

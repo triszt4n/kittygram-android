@@ -144,7 +144,7 @@ class WebKittiesActivity :
         webKitty: WebKitty,
         name: String,
         rating: Int,
-        collection: CollectionWithKitties
+        collection: CollectionWithKitties?
     ) {
         viewModel.addKittyToCollection(webKitty, collection, rating, name)
     }
