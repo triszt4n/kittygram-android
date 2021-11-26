@@ -33,9 +33,13 @@ class UpdateCollectionDialog(
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogUpdateCollectionBinding.inflate(layoutInflater)
-        binding.collectionName.addTextChangedListener { edit ->
-            if (edit.toString().length < 4) {
-                binding.collectionName.error = "Name too short (>3 characters)"
+
+        binding.collectionName.apply {
+            setText(collection.collection.name)
+            addTextChangedListener { edit ->
+                if (edit.toString().length < 4) {
+                    binding.collectionName.error = "Name too short (>3 characters)"
+                }
             }
         }
 
