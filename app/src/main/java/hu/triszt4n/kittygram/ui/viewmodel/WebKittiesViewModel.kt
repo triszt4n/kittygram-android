@@ -13,9 +13,10 @@ import hu.triszt4n.kittygram.repository.KittyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WebKittiesViewModel(application: Application): AndroidViewModel(application) {
+class WebKittiesViewModel(application: Application) : AndroidViewModel(application) {
     private val kittyRepository: KittyRepository
     private val collectionRepository: CollectionRepository
+
     init {
         val kittyDao = KittygramDatabase.getDatabase(application).kittyDao()
         val collectionDao = KittygramDatabase.getDatabase(application).collectionDao()
@@ -23,71 +24,63 @@ class WebKittiesViewModel(application: Application): AndroidViewModel(applicatio
         collectionRepository = CollectionRepository(collectionDao, kittyDao)
     }
 
-    val addedKittiesLiveData: MutableLiveData<MutableList<WebKitty>> = MutableLiveData()
+    var errorMessage: MutableLiveData<String?> = MutableLiveData()
+    val webKitties: MutableLiveData<MutableList<WebKitty>> = MutableLiveData()
+    val collections: MutableLiveData<List<CollectionWithKitties>> = MutableLiveData()
+    val addedKitty: MutableLiveData<Kitty> = MutableLiveData()
 
-    fun clearAddedKitties() {
+    fun clearWebKitties() {
         viewModelScope.launch {
-            addedKittiesLiveData.value?.clear()
+            webKitties.value?.clear()
         }
     }
 
-    fun initFirstPageKitties(tag: String? = null) {
+    fun fetchMoreWebKitties(tag: String? = null, page: Int) {
         viewModelScope.launch {
-            errorMessage = null
-            val response = kittyRepository.getPaginatedWebKitties(tag, 1)
-            if (response.isSuccessful) {
-                addedKittiesLiveData.value = response.body()!!
-            }
-            else {
-                errorMessage = response.errorBody().toString()
-            }
-        }
-    }
-
-    fun addAllKitties(tag: String? = null, page: Int) {
-        viewModelScope.launch {
-            errorMessage = null
+            errorMessage.value = null
             val response = kittyRepository.getPaginatedWebKitties(tag, page)
             if (response.isSuccessful) {
-                addedKittiesLiveData.value = response.body()!!
-            }
-            else {
-                errorMessage = response.errorBody().toString()
+                webKitties.value = response.body()!!
+            } else {
+                errorMessage.value = response.errorBody().toString()
             }
         }
     }
 
-    val collectionsLiveData: MutableLiveData<List<CollectionWithKitties>> = MutableLiveData()
     fun getAllCollections() {
-        errorMessage = null
+        errorMessage.value = null
         viewModelScope.launch {
-            collectionsLiveData.value = collectionRepository.getAllCollections()
+            collections.value = collectionRepository.getAllCollections()
         }
     }
 
-    var errorMessage: String? = null
     fun addKittyToCollection(
         webKitty: WebKitty,
         collectionWithKitties: CollectionWithKitties,
         rating: Int,
         name: String
     ) {
-        errorMessage = null
+        errorMessage.value = null
         if (name.length < 4) {
-            errorMessage = "Name too short (under 4 characters)"
+            errorMessage.value = "Name too short (under 4 characters)"
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             val kitty = Kitty(
-                    webId = webKitty.id,
-                    tags = webKitty.tags,
-                    url = webKitty.url,
-                    collectionId = collectionWithKitties.collection.id!!,
-                    rating = rating,
-                    name = name
+                webId = webKitty.id,
+                tags = webKitty.tags,
+                url = webKitty.url,
+                collectionId = collectionWithKitties.collection.id!!,
+                rating = rating,
+                name = name
             )
-            errorMessage = if (!kittyRepository.addKitty(kitty)) "Couldn't create Kitty!" else null
+            val resultKitty: Kitty? = kittyRepository.addKitty(kitty)
+            if (resultKitty != null) {
+                addedKitty.value = resultKitty!!
+            } else {
+                errorMessage.value = "Kitty already in Collection!"
+            }
         }
     }
 }

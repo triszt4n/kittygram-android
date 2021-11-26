@@ -2,33 +2,25 @@ package hu.triszt4n.kittygram.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hu.triszt4n.kittygram.R
-import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.entity.Kitty
 import hu.triszt4n.kittygram.databinding.ActivityCollectionKittiesBinding
-import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
-import hu.triszt4n.kittygram.databinding.ActivityWebKittiesBinding
 import hu.triszt4n.kittygram.ui.adapter.CollectionKittyListAdapter
-import hu.triszt4n.kittygram.ui.adapter.WebKittyListAdapter
 import hu.triszt4n.kittygram.ui.dialog.UpdateKittyDialog
 import hu.triszt4n.kittygram.ui.viewmodel.CollectionKittiesViewModel
 import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
-import hu.triszt4n.kittygram.ui.viewmodel.WebKittiesViewModel
 
 class CollectionKittiesActivity :
     CollectionKittyListAdapter.CollectionKittyListener,
     UpdateKittyDialog.UpdateKittyListener,
-    AppCompatActivity()
-{
+    AppCompatActivity() {
 
     private lateinit var binding: ActivityCollectionKittiesBinding
     private lateinit var viewModel: CollectionKittiesViewModel
@@ -59,15 +51,27 @@ class CollectionKittiesActivity :
 
     private fun observeLiveData() {
         val viewModelFactory = KittygramViewModelFactory(application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(CollectionKittiesViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(CollectionKittiesViewModel::class.java)
+
         viewModel.collectionId = collectionId
         viewModel.getCollection()
-        viewModel.collectionRes.observe(this) { collectionWithKitties ->
+
+        viewModel.collectionWithKitties.observe(this) { collectionWithKitties ->
             binding.toolbar.title = collectionWithKitties.collection.name
             adapter.loadItems(collectionWithKitties.kitties)
         }
+
+        viewModel.errorMessage.observe(this) { msg ->
+            if (msg != null) {
+                Snackbar
+                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
+    // Boilerplate code
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val toolbarMenu: Menu = binding.toolbar.menu
         menuInflater.inflate(R.menu.menu_toolbar, toolbarMenu)
@@ -122,10 +126,5 @@ class CollectionKittiesActivity :
 
     override fun onSaveKitty(kitty: Kitty) {
         viewModel.updateKitty(kitty)
-        if (viewModel.errorMessage != null) {
-            Snackbar
-                .make(binding.root, viewModel.errorMessage!!, Snackbar.LENGTH_LONG)
-                .show()
-        }
     }
 }

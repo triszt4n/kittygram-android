@@ -11,35 +11,36 @@ import hu.triszt4n.kittygram.repository.CollectionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CollectionsViewModel(application: Application): AndroidViewModel(application) {
+class CollectionsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: CollectionRepository
+
     init {
         val collectionDao = KittygramDatabase.getDatabase(application).collectionDao()
         val kittyDao = KittygramDatabase.getDatabase(application).kittyDao()
         repository = CollectionRepository(collectionDao, kittyDao)
     }
 
-    val collectionsRes: MutableLiveData<List<CollectionWithKitties>> = MutableLiveData()
+    val collectionsWithKitties: MutableLiveData<List<CollectionWithKitties>> = MutableLiveData()
+    var errorMessage: MutableLiveData<String?> = MutableLiveData()
+
     fun getAllCollections() {
         viewModelScope.launch {
-            collectionsRes.value = repository.getAllCollections()
+            collectionsWithKitties.value = repository.getAllCollections()
         }
     }
 
-    var errorMessage: String? = null
     fun addCollection(name: String) {
         if (name.length < 4) {
-            errorMessage = "Name too short (under 4 characters)"
+            errorMessage.value = "Name too short (under 4 characters)"
             return
-        }
-        else {
-            errorMessage = null
+        } else {
+            errorMessage.value = null
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             val collection = Collection(name = name)
             repository.addCollection(collection)
-            collectionsRes.postValue(repository.getAllCollections())
+            collectionsWithKitties.postValue(repository.getAllCollections())
         }
     }
 }

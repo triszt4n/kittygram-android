@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class KittygramViewModelFactory(private val application: Application): ViewModelProvider.Factory {
+class KittygramViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return when(modelClass) {
+        return when (modelClass) {
             CollectionsViewModel::class.java -> CollectionsViewModel(application) as T
             WebKittiesViewModel::class.java -> WebKittiesViewModel(application) as T
             CollectionKittiesViewModel::class.java -> CollectionKittiesViewModel(application) as T

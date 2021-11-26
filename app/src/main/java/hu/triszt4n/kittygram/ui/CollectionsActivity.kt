@@ -3,21 +3,15 @@ package hu.triszt4n.kittygram.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
 import hu.triszt4n.kittygram.ui.adapter.CollectionListAdapter
-import hu.triszt4n.kittygram.ui.adapter.WebKittyListAdapter
-import hu.triszt4n.kittygram.ui.dialog.AddKittyDialog
 import hu.triszt4n.kittygram.ui.dialog.CreateCollectionDialog
 import hu.triszt4n.kittygram.ui.viewmodel.CollectionsViewModel
 import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
-import hu.triszt4n.kittygram.ui.viewmodel.WebKittiesViewModel
-import hu.triszt4n.kittygram.util.MoshiInstance
 
 class CollectionsActivity :
     CreateCollectionDialog.AddCollectionListener,
@@ -57,19 +51,22 @@ class CollectionsActivity :
     private fun observeLiveData() {
         val viewModelFactory = KittygramViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(CollectionsViewModel::class.java)
-        viewModel.getAllCollections()
-        viewModel.collectionsRes.observe(this, { list ->
+
+        viewModel.collectionsWithKitties.observe(this, { list ->
             adapter.loadItems(list)
         })
+
+        viewModel.errorMessage.observe(this) { msg ->
+            if (msg != null) {
+                Snackbar
+                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
     override fun onSaveCollection(name: String) {
         viewModel.addCollection(name)
-        if (viewModel.errorMessage != null) {
-            Snackbar
-                .make(binding.root, viewModel.errorMessage!!, Snackbar.LENGTH_LONG)
-                .show()
-        }
     }
 
     override fun onOpenCollection(collection: CollectionWithKitties) {

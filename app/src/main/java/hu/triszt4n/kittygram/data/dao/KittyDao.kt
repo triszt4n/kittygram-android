@@ -16,7 +16,7 @@ interface KittyDao {
     suspend fun findByWebId(webId: String): Kitty?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(kitty: Kitty)
+    suspend fun insert(kitty: Kitty): Long?
 
     @Update
     suspend fun update(kitty: Kitty)

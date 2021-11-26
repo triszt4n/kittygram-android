@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.kittiesCard.setOnClickListener {
-            val intent = Intent(this, WebKittiesActivity::class.java)
+            val intent = Intent(this, WebKittiesActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            }
             startActivity(intent)
         }
 

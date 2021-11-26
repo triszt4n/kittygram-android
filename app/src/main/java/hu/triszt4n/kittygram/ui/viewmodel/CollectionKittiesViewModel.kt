@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.database.KittygramDatabase
-import hu.triszt4n.kittygram.data.entity.Collection
 import hu.triszt4n.kittygram.data.entity.Kitty
 import hu.triszt4n.kittygram.repository.CollectionRepository
 import hu.triszt4n.kittygram.repository.KittyRepository
@@ -25,17 +24,18 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
     }
 
     var collectionId: Long? = null
+    val collectionWithKitties: MutableLiveData<CollectionWithKitties> = MutableLiveData()
+    var errorMessage: MutableLiveData<String?> = MutableLiveData()
 
-    val collectionRes: MutableLiveData<CollectionWithKitties> = MutableLiveData()
     fun getCollection() {
         viewModelScope.launch {
-            collectionRes.value = collectionId?.let { collectionRepository.getCollectionWithKitties(it) }
+            collectionWithKitties.value = collectionId?.let { collectionRepository.getCollectionWithKitties(it) }
         }
     }
 
     fun deleteCollection() {
         viewModelScope.launch {
-            collectionRes.value?.let { collectionRepository.deleteCollection(it) }
+            collectionWithKitties.value?.let { collectionRepository.deleteCollection(it) }
         }
     }
 
@@ -46,14 +46,13 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
         }
     }
 
-    var errorMessage: String? = null
     fun updateKitty(kitty: Kitty) {
         if (kitty.name.length < 4) {
-            errorMessage = "Name too short (under 4 characters)"
+            errorMessage.value = "Name too short (under 4 characters)"
             return
         }
         else {
-            errorMessage = null
+            errorMessage.value = null
         }
 
         viewModelScope.launch(Dispatchers.IO) {

@@ -1,13 +1,14 @@
 package hu.triszt4n.kittygram.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hu.triszt4n.kittygram.MainActivity
 import hu.triszt4n.kittygram.api.model.WebKitty
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.databinding.ActivityWebKittiesBinding
@@ -19,8 +20,7 @@ import hu.triszt4n.kittygram.ui.viewmodel.WebKittiesViewModel
 class WebKittiesActivity :
     AppCompatActivity(),
     WebKittyListAdapter.WebKittySaveClickListener,
-    AddKittyDialog.AddKittyListener
-{
+    AddKittyDialog.AddKittyListener {
     private lateinit var binding: ActivityWebKittiesBinding
     private lateinit var viewModel: WebKittiesViewModel
 
@@ -45,7 +45,7 @@ class WebKittiesActivity :
             if (!v.canScrollVertically(1)) {
                 binding.progressBar.visibility = View.VISIBLE
                 ++page
-                viewModel.addAllKitties(page = page)
+                viewModel.fetchMoreWebKitties(page = page)
             }
         }
 
@@ -62,26 +62,37 @@ class WebKittiesActivity :
     private fun observeLiveData() {
         val viewModelFactory = KittygramViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(WebKittiesViewModel::class.java)
+
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.initFirstPageKitties()
+        viewModel.fetchMoreWebKitties(page = 1)
         viewModel.getAllCollections()
-        viewModel.addedKittiesLiveData.observe(this, { list ->
+
+        viewModel.webKitties.observe(this) { kitties ->
             binding.progressBar.visibility = View.GONE
-            if (viewModel.errorMessage != null) {
-                Snackbar.make(
-                    binding.root,
-                    viewModel.errorMessage!!,
-                    Snackbar.LENGTH_LONG
-                ).show()
+            Log.d("KITTIES LOADED IN", "size: ${kitties?.size}: $kitties")
+            adapter.addItems(kitties)
+        }
+
+        viewModel.collections.observe(this) { collections ->
+            this.collections = collections
+        }
+
+        viewModel.addedKitty.observe(this) { kitty ->
+            if (kitty != null) {
+                val intent = Intent(this, CollectionKittiesActivity::class.java).apply {
+                    putExtra("collectionId", kitty.collectionId)
+                }
+                startActivity(intent)
             }
-            else {
-                Log.d("KITTIES LOADED IN", "size: ${list?.size}: $list")
-                adapter.addItems(list)
+        }
+
+        viewModel.errorMessage.observe(this) { msg ->
+            if (msg != null) {
+                Snackbar
+                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                    .show()
             }
-        })
-        viewModel.collectionsLiveData.observe(this, { list ->
-            collections = list
-        })
+        }
     }
 
     override fun onItemSaved(item: WebKitty) {
@@ -91,12 +102,19 @@ class WebKittiesActivity :
             .show(supportFragmentManager, AddKittyDialog.TAG)
     }
 
-    override fun onSaveKitty(webKitty: WebKitty, name: String, rating: Int, collection: CollectionWithKitties) {
+    override fun onSaveKitty(
+        webKitty: WebKitty,
+        name: String,
+        rating: Int,
+        collection: CollectionWithKitties
+    ) {
         viewModel.addKittyToCollection(webKitty, collection, rating, name)
-        if (viewModel.errorMessage != null) {
-            Snackbar
-                .make(binding.root, viewModel.errorMessage!!, Snackbar.LENGTH_LONG)
-                .show()
+    }
+
+    override fun onBackPressed() {
+        val backIntent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
+        startActivity(backIntent)
     }
 }
