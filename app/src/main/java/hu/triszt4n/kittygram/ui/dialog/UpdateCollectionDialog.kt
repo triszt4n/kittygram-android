@@ -6,10 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.data.CollectionWithKitties
-import hu.triszt4n.kittygram.data.entity.Kitty
-import hu.triszt4n.kittygram.databinding.DialogCreateCollectionBinding
-import hu.triszt4n.kittygram.databinding.DialogUpdateCollectionBinding
+import hu.triszt4n.kittygram.databinding.DialogCreateOrUpdateCollectionBinding
 
 class UpdateCollectionDialog(
     private val listener: UpdateCollectionListener
@@ -23,7 +22,7 @@ class UpdateCollectionDialog(
         fun onSaveCollection(collection: CollectionWithKitties)
     }
 
-    private lateinit var binding: DialogUpdateCollectionBinding
+    private lateinit var binding: DialogCreateOrUpdateCollectionBinding
     private lateinit var collection: CollectionWithKitties
 
     fun addCollection(collection: CollectionWithKitties): UpdateCollectionDialog {
@@ -32,25 +31,25 @@ class UpdateCollectionDialog(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogUpdateCollectionBinding.inflate(layoutInflater)
+        binding = DialogCreateOrUpdateCollectionBinding.inflate(layoutInflater)
 
         binding.collectionName.apply {
             setText(collection.collection.name)
             addTextChangedListener { edit ->
                 if (edit.toString().length < 4) {
-                    binding.collectionName.error = "Name too short (>3 characters)"
+                    binding.collectionName.error = getString(R.string.warning_name_too_short)
                 }
             }
         }
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Update Collection")
+            .setTitle(getString(R.string.prompt_update_collection))
             .setView(binding.root)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(getString(R.string.save)) { _, _ ->
                 collection.collection.name = binding.collectionName.text.toString()
                 listener.onSaveCollection(collection)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .create()
     }
 }

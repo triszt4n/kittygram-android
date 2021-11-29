@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
 import hu.triszt4n.kittygram.ui.adapter.CollectionListAdapter
@@ -16,8 +17,7 @@ import hu.triszt4n.kittygram.ui.viewmodel.KittygramViewModelFactory
 class CollectionsActivity :
     CreateCollectionDialog.AddCollectionListener,
     CollectionListAdapter.CollectionOpenListener,
-    AppCompatActivity()
-{
+    AppCompatActivity() {
 
     private lateinit var binding: ActivityCollectionsBinding
     private lateinit var viewModel: CollectionsViewModel
@@ -35,7 +35,7 @@ class CollectionsActivity :
         initRecyclerView()
         observeLiveData()
 
-        binding.toolbar.title = "Your collections"
+        binding.toolbar.title = getString(R.string.collections_title)
 
         binding.fab.setOnClickListener {
             CreateCollectionDialog(this)
@@ -57,11 +57,12 @@ class CollectionsActivity :
         })
 
         viewModel.errorMessage.observe(this) { msg ->
-            if (msg != null) {
-                Snackbar
-                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
-                    .show()
-            }
+            if (msg == null)
+                return@observe
+
+            Snackbar
+                .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                .show()
         }
     }
 

@@ -8,9 +8,10 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.api.model.WebKitty
 import hu.triszt4n.kittygram.data.CollectionWithKitties
-import hu.triszt4n.kittygram.databinding.DialogAddKittyBinding
+import hu.triszt4n.kittygram.databinding.DialogAddOrUpdateKittyBinding
 
 class AddKittyDialog(
     private val listener: AddKittyListener
@@ -24,7 +25,7 @@ class AddKittyDialog(
         fun onSaveKitty(webKitty: WebKitty, name: String, rating: Int, collection: CollectionWithKitties?)
     }
 
-    private lateinit var binding: DialogAddKittyBinding
+    private lateinit var binding: DialogAddOrUpdateKittyBinding
     private lateinit var collections: List<CollectionWithKitties>
     private lateinit var kitty: WebKitty
 
@@ -39,7 +40,7 @@ class AddKittyDialog(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogAddKittyBinding.inflate(layoutInflater)
+        binding = DialogAddOrUpdateKittyBinding.inflate(layoutInflater)
 
         binding.collectionsSpinner.adapter = ArrayAdapter(
             requireContext(),
@@ -51,14 +52,14 @@ class AddKittyDialog(
 
         binding.kittyName.addTextChangedListener { text: Editable? ->
             if (text.toString().length < 4) {
-                binding.kittyName.error = "Name too short (>3 characters)"
+                binding.kittyName.error = getString(R.string.warning_name_too_short)
             }
         }
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Add Kitty to Collection")
+            .setTitle(getString(R.string.prompt_add_kitty))
             .setView(binding.root)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(getString(R.string.save)) { _, _ ->
                 listener.onSaveKitty(
                     kitty,
                     binding.kittyName.text.toString(),
@@ -66,7 +67,7 @@ class AddKittyDialog(
                     collections[binding.collectionsSpinner.selectedItemPosition]
                 )
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .create()
     }
 }

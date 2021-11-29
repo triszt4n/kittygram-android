@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.database.KittygramDatabase
 import hu.triszt4n.kittygram.data.entity.Kitty
@@ -13,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class CollectionKittiesViewModel(application: Application): AndroidViewModel(application) {
+class CollectionKittiesViewModel(application: Application) : AndroidViewModel(application) {
     private val collectionRepository: CollectionRepository
     private val kittyRepository: KittyRepository
 
@@ -31,7 +32,8 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
     fun getCollection() {
         errorMessage.value = null
         viewModelScope.launch {
-            collectionWithKitties.value = collectionId?.let { collectionRepository.getCollectionWithKitties(it) }
+            collectionWithKitties.value =
+                collectionId?.let { collectionRepository.getCollectionWithKitties(it) }
         }
     }
 
@@ -58,7 +60,8 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
     fun updateKitty(kitty: Kitty) {
         errorMessage.value = null
         if (kitty.name.length < 4) {
-            errorMessage.value = "Name too short (under 4 characters)"
+            errorMessage.value =
+                getApplication<Application>().getString(R.string.warning_name_too_short)
             return
         }
 
@@ -71,7 +74,8 @@ class CollectionKittiesViewModel(application: Application): AndroidViewModel(app
     fun updateCollection(collection: CollectionWithKitties) {
         errorMessage.value = null
         if (collection.collection.name.length < 4) {
-            errorMessage.value = "Name too short (under 4 characters)"
+            errorMessage.value =
+                getApplication<Application>().getString(R.string.warning_name_too_short)
             return
         }
 

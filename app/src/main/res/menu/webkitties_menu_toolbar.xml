@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/goto_position_button"
-        android:title="Scroll To Kitty..."
+        android:title="@string/scroll_to_kitty"
         app:showAsAction="never" />
 </menu>

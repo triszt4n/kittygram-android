@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
-                    android:text="Save"
+                    android:text="@string/save"
                     android:id="@+id/kitty_save_button" />
             </LinearLayout>
         </LinearLayout>

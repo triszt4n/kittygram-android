@@ -6,7 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import hu.triszt4n.kittygram.databinding.DialogCreateCollectionBinding
+import hu.triszt4n.kittygram.R
+import hu.triszt4n.kittygram.databinding.DialogCreateOrUpdateCollectionBinding
 
 class CreateCollectionDialog(
     private val listener: AddCollectionListener
@@ -20,23 +21,23 @@ class CreateCollectionDialog(
         fun onSaveCollection(name: String)
     }
 
-    private lateinit var binding: DialogCreateCollectionBinding
+    private lateinit var binding: DialogCreateOrUpdateCollectionBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogCreateCollectionBinding.inflate(layoutInflater)
+        binding = DialogCreateOrUpdateCollectionBinding.inflate(layoutInflater)
         binding.collectionName.addTextChangedListener { edit ->
             if (edit.toString().length < 4) {
-                binding.collectionName.error = "Name too short (>3 characters)"
+                binding.collectionName.error = getString(R.string.warning_name_too_short)
             }
         }
 
         return AlertDialog.Builder(requireContext())
-            .setTitle("Create Collection")
+            .setTitle(getString(R.string.prompt_create_collection))
             .setView(binding.root)
-            .setPositiveButton("Save") { _, _ ->
+            .setPositiveButton(getString(R.string.save)) { _, _ ->
                 listener.onSaveCollection(binding.collectionName.text.toString())
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .create()
     }
 }

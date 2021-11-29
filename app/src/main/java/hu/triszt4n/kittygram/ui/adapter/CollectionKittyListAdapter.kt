@@ -58,7 +58,7 @@ class CollectionKittyListAdapter(
         holder.binding.apply {
             kittyName.text = kitty.name
             kittyRating.rating = kitty.rating?.toFloat() ?: 0.0f
-            kittyTags.text = kitty.tags.toString()
+            kittyTags.text = kitty.tags.let { if (it.isEmpty()) "" else it.toString() }
 
             collectionKittyImage.setOnClickListener { view ->
                 stfalconImageViewerBuilder

@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
-                    android:text="Modify"
+                    android:text="@string/modify"
                     style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/kitty_modify_button" />
                 <Space
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:id="@+id/kitty_delete_button" />
             </LinearLayout>
         </LinearLayout>

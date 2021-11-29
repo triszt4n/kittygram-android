@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Enter position of Kitty to scroll to" />
+        android:text="@string/dialog_kitty_position_label" />
 
     <EditText
         android:id="@+id/position_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Position"
+        android:hint="@string/dialog_kitty_position_placeholder"
         android:inputType="number" />
 </LinearLayout>

@@ -11,27 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Add a name to your kitten" />
+        android:text="@string/dialog_collection_name_label" />
 
     <EditText
-        android:id="@+id/kitty_name"
+        android:id="@+id/collection_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name your kitty"
+        android:hint="@string/dialog_collection_name_placeholder"
         android:imeOptions="actionNext"
         android:inputType="text" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Rate the cuteness of the kitty" />
-
-    <RatingBar
-        android:id="@+id/kitty_rating"
-        android:layout_width="wrap_content"
-        android:stepSize="1.0"
-        android:numStars="5"
-        android:layout_height="wrap_content"
-        android:paddingVertical="8dp" />
 </LinearLayout>

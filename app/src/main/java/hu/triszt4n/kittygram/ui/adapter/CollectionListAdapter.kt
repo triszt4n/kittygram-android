@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.databinding.ActivityCollectionsBinding
 import hu.triszt4n.kittygram.databinding.ListRowCollectionBinding
@@ -29,12 +30,16 @@ class CollectionListAdapter(
 
     override fun onBindViewHolder(holder: CollectionViewHolder, position: Int) {
         val collectionWithKitties = items[position]
+        val context = holder.binding.root.context
 
         holder.binding.apply {
             collectionName.text = collectionWithKitties.collection.name
             collectionCount.text =
-                if (collectionWithKitties.kitties.isEmpty()) "empty"
-                else "${collectionWithKitties.kitties.size} items"
+                if (collectionWithKitties.kitties.isEmpty()) context.getString(R.string.empty_collection_label)
+                else context.getString(
+                    R.string.itemcounter_numbered,
+                    collectionWithKitties.kitties.size.toString()
+                )
 
             collectionOpenButton.setOnClickListener {
                 listener.onOpenCollection(collectionWithKitties)

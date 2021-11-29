@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.database.KittygramDatabase
 import hu.triszt4n.kittygram.data.entity.Collection
@@ -31,7 +32,8 @@ class CollectionsViewModel(application: Application) : AndroidViewModel(applicat
 
     fun addCollection(name: String) {
         if (name.length < 4) {
-            errorMessage.value = "Name too short (under 4 characters)"
+            errorMessage.value =
+                getApplication<Application>().getString(R.string.warning_name_too_short)
             return
         } else {
             errorMessage.value = null

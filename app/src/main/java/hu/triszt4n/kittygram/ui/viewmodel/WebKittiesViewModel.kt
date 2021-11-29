@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import hu.triszt4n.kittygram.R
 import hu.triszt4n.kittygram.api.model.WebKitty
 import hu.triszt4n.kittygram.data.CollectionWithKitties
 import hu.triszt4n.kittygram.data.database.KittygramDatabase
@@ -62,11 +63,13 @@ class WebKittiesViewModel(application: Application) : AndroidViewModel(applicati
     ) {
         errorMessage.value = null
         if (name.length < 4) {
-            errorMessage.value = "Name too short (under 4 characters)"
+            errorMessage.value =
+                getApplication<Application>().getString(R.string.warning_name_too_short)
             return
         }
         if (collectionWithKitties == null) {
-            errorMessage.value = "No collection chosen!"
+            errorMessage.value =
+                getApplication<Application>().getString(R.string.warning_no_collection_chosen)
             return
         }
 
@@ -83,7 +86,10 @@ class WebKittiesViewModel(application: Application) : AndroidViewModel(applicati
             if (resultKitty != null) {
                 addedKitty.postValue(resultKitty!!)
             } else {
-                errorMessage.postValue("Kitty already in Collection!")
+                errorMessage.postValue(
+                    getApplication<Application>()
+                        .getString(R.string.warning_kitty_already_in_collection)
+                )
             }
         }
     }

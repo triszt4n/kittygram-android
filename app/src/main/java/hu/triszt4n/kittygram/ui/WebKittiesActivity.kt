@@ -78,7 +78,8 @@ class WebKittiesActivity :
         viewModel.webKitties.observe(this) { kitties ->
             binding.progressBar.visibility = View.GONE
             binding.kittyCountContainer.visibility = View.VISIBLE
-            binding.kittyCount.text = "${page * PAGING_LIMIT} Kitties loaded"
+            binding.kittyCount.text =
+                getString(R.string.kitties_loaded_numbered, (page * PAGING_LIMIT).toString())
             Log.d("KITTIES LOADED IN", "size: ${kitties?.size}: $kitties")
             adapter.addItems(kitties)
         }
@@ -97,11 +98,12 @@ class WebKittiesActivity :
         }
 
         viewModel.errorMessage.observe(this) { msg ->
-            if (msg != null) {
-                Snackbar
-                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
-                    .show()
-            }
+            if (msg == null)
+                return@observe
+
+            Snackbar
+                .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -155,7 +157,9 @@ class WebKittiesActivity :
         val sharedPreferences = getSharedPreferences("kittygram_preferences", Context.MODE_PRIVATE)
         if (sharedPreferences.getBoolean("quittingApplication", true)) {
             finish()
+            return
         }
+        viewModel.getAllCollections()
     }
 
     override fun onBackPressed() {
@@ -166,12 +170,11 @@ class WebKittiesActivity :
     }
 
     override fun onGotoKitty(position: Int) {
-        if (position in (1 .. page * PAGING_LIMIT)) {
-            binding.recyclerView.scrollToPosition(position - 1)
-        }
-        else {
+        if (position in (1..page * PAGING_LIMIT)) {
+            binding.recyclerView.smoothScrollToPosition(position - 1)
+        } else {
             Snackbar
-                .make(binding.root, "Invalid position entered!", Snackbar.LENGTH_LONG)
+                .make(binding.root, getString(R.string.warning_invalid_position), Snackbar.LENGTH_LONG)
                 .show()
         }
     }

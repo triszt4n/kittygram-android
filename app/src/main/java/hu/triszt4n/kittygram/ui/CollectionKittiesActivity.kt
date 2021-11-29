@@ -68,9 +68,9 @@ class CollectionKittiesActivity :
             val count = collectionWithKitties.kitties.size
             if (count > 0) {
                 binding.collectionCountContainer.visibility = View.VISIBLE
-                binding.collectionCount.text = "$count Kitties"
-            }
-            else {
+                binding.collectionCount.text =
+                    getString(R.string.kitties_numbered, count.toString())
+            } else {
                 binding.collectionCountContainer.visibility = View.GONE
             }
 
@@ -79,11 +79,12 @@ class CollectionKittiesActivity :
         }
 
         viewModel.errorMessage.observe(this) { msg ->
-            if (msg != null) {
-                Snackbar
-                    .make(binding.root, msg, Snackbar.LENGTH_LONG)
-                    .show()
-            }
+            if (msg == null)
+                return@observe
+
+            Snackbar
+                .make(binding.root, msg, Snackbar.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -109,24 +110,27 @@ class CollectionKittiesActivity :
         return when (item.itemId) {
             R.id.collection_delete_button -> {
                 AlertDialog.Builder(binding.root.context)
-                    .setTitle("Delete Collection")
-                    .setMessage("Are you sure you want to delete the entire collection?")
-                    .setPositiveButton("Delete") { _, _ ->
+                    .setTitle(getString(R.string.prompt_delete_collection))
+                    .setMessage(getString(R.string.prompt_delete_collection_question))
+                    .setPositiveButton(getString(R.string.delete)) { _, _ ->
                         viewModel.deleteCollection()
                         this.finish()
                     }
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show()
                 true
             }
             R.id.collection_update_button -> {
                 if (collectionWithKitties == null) {
                     Snackbar
-                        .make(binding.root, "No collection loaded yet!", Snackbar.LENGTH_LONG)
+                        .make(
+                            binding.root,
+                            getString(R.string.warning_no_collection_loaded),
+                            Snackbar.LENGTH_LONG
+                        )
                         .show()
                     false
-                }
-                else {
+                } else {
                     UpdateCollectionDialog(this)
                         .addCollection(collectionWithKitties!!)
                         .show(supportFragmentManager, UpdateCollectionDialog.TAG)
@@ -139,12 +143,17 @@ class CollectionKittiesActivity :
 
     override fun onDeleteClicked(kitty: Kitty) {
         AlertDialog.Builder(binding.root.context)
-            .setTitle("Delete Kitty from Collection")
-            .setMessage("Are you sure you want to remove ${kitty.name} from collection?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle(getString(R.string.prompt_delete_kitty_from_collection))
+            .setMessage(
+                getString(
+                    R.string.prompt_delete_kitty_from_collection_question,
+                    kitty.name
+                )
+            )
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 viewModel.deleteKitty(kitty)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
