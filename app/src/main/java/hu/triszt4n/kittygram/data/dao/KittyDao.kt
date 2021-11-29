@@ -1,7 +1,6 @@
 package hu.triszt4n.kittygram.data.dao
 
 import androidx.room.*
-import hu.triszt4n.kittygram.data.entity.Collection
 import hu.triszt4n.kittygram.data.entity.Kitty
 
 @Dao

@@ -3,18 +3,12 @@ package hu.triszt4n.kittygram.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.android.material.snackbar.Snackbar
 import com.stfalcon.imageviewer.StfalconImageViewer
-import hu.triszt4n.kittygram.api.model.WebKitty
 import hu.triszt4n.kittygram.data.entity.Kitty
 import hu.triszt4n.kittygram.databinding.ActivityCollectionKittiesBinding
-import hu.triszt4n.kittygram.databinding.ActivityWebKittiesBinding
 import hu.triszt4n.kittygram.databinding.ListRowCollectionKittyBinding
-import hu.triszt4n.kittygram.databinding.ListRowWebKittyBinding
 import hu.triszt4n.kittygram.util.Constants
 
 class CollectionKittyListAdapter(

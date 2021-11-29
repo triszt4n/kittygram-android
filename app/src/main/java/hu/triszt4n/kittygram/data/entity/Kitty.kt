@@ -5,7 +5,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import hu.triszt4n.kittygram.data.util.Converter
-import hu.triszt4n.kittygram.api.model.WebKitty
 import java.util.*
 
 @Entity(tableName = "kitty", indices = [Index(value = ["webId"], unique = true)])

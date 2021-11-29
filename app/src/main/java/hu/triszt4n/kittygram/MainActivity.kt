@@ -1,15 +1,13 @@
 package hu.triszt4n.kittygram
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import hu.triszt4n.kittygram.databinding.ActivityMainBinding
-import android.content.Intent
 import hu.triszt4n.kittygram.ui.CollectionsActivity
 import hu.triszt4n.kittygram.ui.WebKittiesActivity
-import android.content.SharedPreferences
-import androidx.core.content.edit
-
 
 class MainActivity : AppCompatActivity() {
 
