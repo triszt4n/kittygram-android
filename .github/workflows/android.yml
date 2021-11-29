@@ -3,8 +3,8 @@ name: Minimal Android CI Workflow
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   apk:
